@@ -46,14 +46,57 @@ export class CiudadService {
     }
   }
 
-  async create(CiudadDTO : CiudadDTO): Promise<CiudadDTO>{
-    
-    //let ciudad : Ciudad = new Ciudad(CiudadDTO.nombre)
-    //this.ciudadRepository.save(ciudad);
-     
-    return await this.ciudadRepository.save(new Ciudad(CiudadDTO.nombre));
+  async create(CiudadDTO: CiudadDTO): Promise<CiudadDTO> {
 
-// min 1:47:15
+    //     let ciudad : Ciudad = new Ciudad(CiudadDTO.nombre)
+    //  return await this.ciudadRepository.save(ciudad); -->primer prueba (retorna un objeto "Ciudad")
+
+    //    return await this.ciudadRepository.save(new Ciudad(CiudadDTO.nombre)); --> segunda prueba (retorna un objeto "Ciudad")
+    try {
+      let ciudad: Ciudad = await this.ciudadRepository.save(new Ciudad(CiudadDTO.nombre));
+
+
+      if (ciudad)
+        return CiudadDTO;
+      else
+        throw new Error('No se pudo crear la ciudad');
+    }
+    catch (error) {
+      throw new HttpException({
+        status: HttpStatus.NOT_FOUND,
+        error: 'error en ciudad' + error
+      }, HttpStatus.NOT_FOUND)
+    }
+    // min 1:47:15
   }
 
+
+  async update(ciudadDTO: CiudadDTO, id: number): Promise<string> {
+    const criterio: FindOneOptions = { where: { id: id } };
+    let ciudad: Ciudad = await this.ciudadRepository.findOne(criterio);
+    let ciudadvieja = ciudad.getNombre();
+
+    if (!ciudad)
+      throw new Error('no se pudo encontrar la ciudad a moficiar');
+    else
+      ciudad.setNombre(ciudadDTO.nombre);
+    ciudad = await this.ciudadRepository.save(ciudad)
+    return `OK  ciudad vieja --> ${ciudadvieja} ciudad nueva --> ${ciudadDTO.nombre}`
+
+  }
+
+  async delete(id: number): Promise<any> {
+    const criterio: FindOneOptions = { where: { id: id } };
+    let ciudad: Ciudad = await this.ciudadRepository.findOne(criterio);
+
+    if (!ciudad) {
+      throw new Error('no se pudo encontrar la ciudad a eliminar');
+    } else {
+      await this.ciudadRepository.remove(ciudad);
+      return {
+        "id": id,
+        "messaje": 'se elimino de forma exitosa'
+      }
+    }
+  }
 }
