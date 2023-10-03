@@ -1,5 +1,7 @@
 import { IsNotEmpty } from "class-validator";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Ciudad } from "src/ciudad/entities/ciudad.entity";
+import { Clase } from "src/clase/entities/clase.entity";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({name: 'escuela'})
 export class Escuela {
@@ -13,6 +15,15 @@ nombre:string;
 @Column()
 @IsNotEmpty()
 domicilio:string;
+
+@ManyToOne(()=>Ciudad, ciudad =>ciudad.escuelas)
+@JoinColumn({name: 'fk_id_ciudad'})
+ciudad:Ciudad;
+
+
+@OneToMany(()=>Clase, clases => clases.escuela)
+clases:Clase[];
+//min 51:20
 
 
 constructor(pNombre:string, pDomicilio:string){

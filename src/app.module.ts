@@ -7,7 +7,7 @@ import { ClaseModule } from './clase/clase.module';
 import { ProfesorModule } from './profesor/profesor.module';
 import { EscuelaModule } from './escuela/escuela.module';
 import { EstudianteModule } from './estudiante/estudiante.module';
-import { AsistenciaModule } from './asistencia/asistencia.module';
+
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -27,8 +27,7 @@ import { AsistenciaModule } from './asistencia/asistencia.module';
   ClaseModule,
   ProfesorModule,
   EscuelaModule,
-  EstudianteModule,
-  AsistenciaModule
+  EstudianteModule
 ],
   controllers: [AppController],
   providers: [AppService],
