@@ -4,6 +4,7 @@ import { Entity } from "typeorm";
 export class Asistencia {
 
 ////asdasdasdasdasd
+//otro agregado
 
 
 
