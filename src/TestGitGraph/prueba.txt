@@ -1,1 +1,3 @@
 asdasdasdasdasdasdasdas
+ok -  cuesta entender en general la cosa
+mas que nada lo que son las ramas remotas, origen, head, y su relacion con lo local y los commits
