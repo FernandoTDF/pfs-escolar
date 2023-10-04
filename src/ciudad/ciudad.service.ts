@@ -14,7 +14,7 @@ export class CiudadService {
     private ciudadRepository: Repository<Ciudad> //vamos a hacer una instancia del repositorio
   ) { }
 
-  async findAllRaw(): Promise<Ciudad[]> {
+  async findAllRaw(): Promise<CiudadDTO[]> {
     let datos = await this.ciudadRepository.query("select * from ciudad");
 
     this.ciudades = [];
@@ -25,11 +25,11 @@ export class CiudadService {
     return this.ciudades;
   }
 
-  async findAllOrm(): Promise<Ciudad[]> {
+  async findAllOrm(): Promise<CiudadDTO[]> {
     return await this.ciudadRepository.find()
   }
 
-  async findById(id: number): Promise<Ciudad> {
+  async findById(id: number): Promise<CiudadDTO> {
     try {
       const criterio: FindOneOptions = { where: { id: id } };
       let ciudad: Ciudad = await this.ciudadRepository.findOne(criterio);
