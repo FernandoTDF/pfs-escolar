@@ -1,4 +1,5 @@
 import { IsNotEmpty } from "class-validator";
+import { CiudadProfesor } from "src/ciudad/entities/ciudad_profesor.entity";
 import { Clase } from "src/clase/entities/clase.entity";
 import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
@@ -21,6 +22,10 @@ export class Profesor {
   clase:Clase[];
   //min 51:20
 
+  @OneToMany(()=>CiudadProfesor, domicilios => domicilios.profesor) 
+  public domicilios:CiudadProfesor[];
+
+  
   constructor(pNombre:string, pApellido:string) {
     this.nombre = pNombre;
     this.apellido = pApellido;
