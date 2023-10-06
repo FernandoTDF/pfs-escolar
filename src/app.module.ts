@@ -7,6 +7,7 @@ import { ClaseModule } from './clase/clase.module';
 import { ProfesorModule } from './profesor/profesor.module';
 import { EscuelaModule } from './escuela/escuela.module';
 import { EstudianteModule } from './estudiante/estudiante.module';
+import { AsistenciaModule } from './asistencia/asistencia.module';
 
 
 @Module({
@@ -27,7 +28,8 @@ import { EstudianteModule } from './estudiante/estudiante.module';
   ClaseModule,
   ProfesorModule,
   EscuelaModule,
-  EstudianteModule
+  EstudianteModule,
+  AsistenciaModule
 ],
   controllers: [AppController],
   providers: [AppService],

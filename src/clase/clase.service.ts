@@ -28,12 +28,12 @@ export class ClaseService {
 
 
   async findAll(): Promise<Clase[]> {
-    return await this.claseRepository.find();
+    return await this.claseRepository.find({relations:['estudiantes']});
   }
 
   async findOne(id: number): Promise<Clase> {
     try {
-      let criterio: FindOneOptions = { where: { id: id } }
+      let criterio: FindOneOptions = { where: { id: id }, relations:['estudiantes']}
       let clase: Clase = await this.claseRepository.findOne(criterio);
       if (clase)
         return clase
