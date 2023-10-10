@@ -7,6 +7,13 @@ import { UpdateProfesorDto } from './dto/update-profesor.dto';
 export class ProfesorController {
   constructor(private readonly profesorService: ProfesorService) {}
 
+
+  @Post('agregar-domicilio')
+  addDomicilio(@Body() body: any): Promise<any> {
+    return this.profesorService.createDomicilio(body);
+  }
+
+
   @Post()
   create(@Body() createProfesorDto: CreateProfesorDto) {
     return this.profesorService.create(createProfesorDto);

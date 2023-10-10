@@ -16,7 +16,7 @@ import { AsistenciaModule } from './asistencia/asistencia.module';
     "host": "localhost",
     "port": 3306,
     "username": "root",
-    "password": "root",
+    "password": "root",//1982LasAljabas402",
     "database": "db_colegio",
     "entities": [__dirname + "/**/**/**.entity{.ts,.js}"],
     "synchronize":true //modifica db a medida que damos guardar, se impacta en la base de datos. Solo en modo desarrollador.
