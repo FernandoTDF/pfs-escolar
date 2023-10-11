@@ -11,9 +11,14 @@ export class EstudianteController {
     return this.estudianteService.create(estudianteDto);
   }
 
-  @Post('con_relacion')
+/*   @Post('con_relacion')
   async createConRelacion(@Body() estudianteDto: EstudianteDto):Promise<boolean> {
     return await this.estudianteService.createConRelacion(estudianteDto);
+  } */ // anulado porque ahora se hace la tabla clase_estudiante para hacer Asistencia
+
+  @Post('agregar-clase')
+  async addClase(@Body() body:any):Promise<any> {
+    return await this.estudianteService.addClase(body);
   }
 
   @Get()

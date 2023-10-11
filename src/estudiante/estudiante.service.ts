@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Estudiante } from './entities/estudiante.entity';
 import { Repository } from 'typeorm';
 import { Clase } from 'src/clase/entities/clase.entity';
+import { EstudianteClase } from './entities/estudiante_clase.entity';
 
 @Injectable()
 export class EstudianteService {
@@ -11,7 +12,9 @@ export class EstudianteService {
   constructor(@InjectRepository(Estudiante)
               private estudianteRepository: Repository<Estudiante>,
               @InjectRepository(Clase)
-              private claseRepository: Repository<Clase>
+              private claseRepository: Repository<Clase>,
+              @InjectRepository(EstudianteClase)
+              private estudianteClaseRepository: Repository<EstudianteClase>
   ) { }
 
 
@@ -19,7 +22,7 @@ export class EstudianteService {
 
   async create(estudianteDto: EstudianteDto) {
 
-    const fecha = new Date();
+    //const fecha = new Date();
 
     const estudiante: Estudiante = await this.estudianteRepository.save(new Estudiante(estudianteDto.nombre, estudianteDto.apellido, estudianteDto.fecha_nacimiento));
 
@@ -32,7 +35,7 @@ export class EstudianteService {
 
 
 
-  async createConRelacion(estudianteDto: EstudianteDto): Promise<boolean> {
+  /* async createConRelacion(estudianteDto: EstudianteDto): Promise<boolean> {
 
     const clase: Clase = await this.claseRepository.findOne({ where: { id: 3 } })
 
@@ -48,6 +51,43 @@ export class EstudianteService {
       return false;
     }
   }
+ */ // este servicio creaba con realcion a la clase que asisitia el estud??
+
+
+ async addClase(body): Promise<any>{
+
+  const claseId = body.claseId;
+  const estudianteId = body.estudianteId;
+  console.log("el Id de estudiante es =" + estudianteId);
+  console.log("el Id de la clase es =" + claseId);
+
+
+    //consultar si el estudiante existe
+    const estudiante:Estudiante = await this.estudianteRepository.findOne({where : {id:estudianteId}})
+
+    if(!estudiante){
+      return `error - no se encuentra el estudiante con id ${estudianteId}`
+    }
+
+    const clase:Clase = await this.claseRepository.findOne({where : {id:claseId}})
+
+    if(!clase){
+      return `error - no se encuentra la clase con id ${claseId}`
+    }
+
+    const clase_estudiante = await this.estudianteClaseRepository.findOne({where:{claseId:claseId, estudianteId:estudianteId}});
+
+    if(clase_estudiante)
+      return `error - el estudiante ya tiene asignada esa clase`;
+    return await this.estudianteClaseRepository.save(new EstudianteClase(estudianteId,claseId));
+
+
+
+
+
+
+
+ } 
 
 
 

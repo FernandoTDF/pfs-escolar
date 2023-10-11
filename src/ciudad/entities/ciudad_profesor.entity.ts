@@ -1,6 +1,7 @@
 import { Profesor } from "src/profesor/entities/profesor.entity";
-import { Entity, Column, ManyToOne, PrimaryColumn } from "typeorm";
 import { Ciudad } from "./ciudad.entity";
+import { Entity, Column, ManyToOne, PrimaryColumn } from "typeorm";
+
 
 @Entity({name:"ciudad_profesor"}) // estamos haciendo la tabla "DomicilioProfesor"
 export class CiudadProfesor {
