@@ -1,1 +1,5 @@
-export class CreateAsistenciaDto {}
+export class CreateAsistenciaDto {
+  readonly estudianteId:number;
+  readonly claseId:number;
+
+}

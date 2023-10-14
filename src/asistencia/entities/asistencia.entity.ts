@@ -4,10 +4,10 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 @Entity({name: 'asistencia'})
 export class Asistencia {
 
-  @PrimaryColumn()
+  @PrimaryColumn({name:'estudianteClaseClaseId'})
   claseId:number;
 
-  @PrimaryColumn()
+  @PrimaryColumn({name:'estudianteClaseEstudianteId'})
   estudianteId:number;
   
   @Column()
