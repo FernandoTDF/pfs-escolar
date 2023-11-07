@@ -7,7 +7,7 @@ import { Entity, Column, ManyToOne, PrimaryColumn } from "typeorm";
 export class CiudadProfesor {
 
  /*  @PrimaryGeneratedColumn()
-  id: number; */ //se elimino porque el mosco no podia relacionar los FK de la tabla cuando trabajaba en el ProfesorService
+  id: number; */ //se elimino porque no podia relacionar los FK de la tabla cuando trabajaba en el ProfesorService
   @PrimaryColumn()
   ciudadId:number;
 

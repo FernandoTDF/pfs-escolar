@@ -1,16 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { CreateProfesorDto } from './dto/create-profesor.dto';
-import { UpdateProfesorDto } from './dto/update-profesor.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Profesor } from './entities/profesor.entity';
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 import { Ciudad } from 'src/ciudad/entities/ciudad.entity';
 import { CiudadProfesor } from 'src/ciudad/entities/ciudad_profesor.entity';
 
 @Injectable()
 export class ProfesorService {
 
-  
+
   constructor(@InjectRepository(Profesor)
   private readonly profesorRepository: Repository<Profesor>,
     @InjectRepository(Ciudad)
@@ -19,33 +18,40 @@ export class ProfesorService {
     private readonly ciudadProfesorRepository: Repository<CiudadProfesor>
   ) { }
 
+  //
+  async create(createProfesorDto: CreateProfesorDto): Promise<any> {
+    let profe: Profesor = new Profesor(createProfesorDto.nombre, createProfesorDto.apellido)
+    let profeCreadoEnLa_db = await this.profesorRepository.save(profe)
 
-  create(createProfesorDto: CreateProfesorDto) {
-    return 'This action adds a new profesor';
+    if (profeCreadoEnLa_db) {
+      return profeCreadoEnLa_db;
+    } else {
+      return "no se ha creado"
+    }
   }
 
 
-  async createDomicilio(body:any):Promise <any> {
+  async createDomicilio(body: any): Promise<any> {
 
     const ciudadId = body.ciudadId;
     const profesorId = body.profesorId;
     const domicilio = body.direccion;
 
-    const { city, teacher, address} = body;
-    
-      console.log("este es el ciudadId = " + ciudadId)
-      console.log("este es el profesorId = " + profesorId)
-      console.log("este es el domicilio =" + domicilio)
+    const { city, teacher, address } = body;
 
-      /* console.log("este es el body =" + body)
+    console.log("este es el ciudadId = " + ciudadId)
+    console.log("este es el profesorId = " + profesorId)
+    console.log("este es el domicilio =" + domicilio)
 
-      console.log("este es el city = " + city)
-      console.log("este es el teacher = " + teacher)
-      console.log("este es la address  =" + address)
- */
+    /* console.log("este es el body =" + body)
+
+    console.log("este es el city = " + city)
+    console.log("este es el teacher = " + teacher)
+    console.log("este es la address  =" + address)
+*/
 
     const profesor = await this.profesorRepository.findOne({ where: { id: profesorId } });
-    
+
     if (!profesor) {
       return `error - no existe este profesor`
     }
@@ -65,19 +71,54 @@ export class ProfesorService {
     }
   }
 
-  findAll() {
-    return `This action returns all profesor`;
+  async findAll(): Promise<Profesor[]> {
+    return await this.profesorRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} profesor`;
+  async findOne(id: number): Promise<Profesor> {
+    let criterio: FindOneOptions = { where: { id: id } }
+    let profeEncontrado: Profesor = await this.profesorRepository.findOne(criterio);
+
+    if (!profeEncontrado) {
+      throw new Error("no existe el docente buscado");
+    } else {
+      return profeEncontrado;
+    }
   }
 
-  update(id: number, updateProfesorDto: UpdateProfesorDto) {
-    return `This action updates a #${id} profesor`;
+  async update(id: number, updateProfesorDto: CreateProfesorDto):Promise <any> {
+    let criterioUpdate: FindOneOptions = { where: { id: id } };
+    let profeFindUpdate: Profesor = await this.profesorRepository.findOne(criterioUpdate);
+    let profeAntesCambio: Profesor = profeFindUpdate;
+
+
+    if (profeFindUpdate) {
+      profeFindUpdate.setNombre(updateProfesorDto.nombre);
+      profeFindUpdate.setApellido(updateProfesorDto.apellido);
+
+      profeFindUpdate = await this.profesorRepository.save(profeFindUpdate)
+
+      if (profeFindUpdate) {
+        return `Se ha actualizado el Profesor: antes: ${profeAntesCambio.getNombre()},  ${profeAntesCambio.getApellido()}  y ahora  ${profeFindUpdate.getNombre()},  ${profeFindUpdate.getApellido()}`
+      } else {
+        return `No funciono`
+      }
+
+    } else {
+      return `no se encontro nada en la db`
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} profesor`;
+  async remove(id: number):Promise <any> {
+    let criterioRemove:FindOneOptions = { where : { id : id } }
+    let profeParaRemover:Profesor = await this.profesorRepository.findOne(criterioRemove);
+
+    if(profeParaRemover){
+      await this.profesorRepository.remove(profeParaRemover)
+      return "se removio" + profeParaRemover.apellido;
+
+    }
+
+
   }
 }

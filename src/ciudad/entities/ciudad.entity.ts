@@ -1,6 +1,7 @@
 import { Escuela } from "src/escuela/entities/escuela.entity";
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 import { CiudadProfesor } from "./ciudad_profesor.entity";
+import { CiudadEstudiante } from "./ciudad_estudiante.entity";
 
 @Entity({name:"ciudad"}) //esta entity se va a mapear a la tabla ciudad
 export class Ciudad {
@@ -17,7 +18,11 @@ export class Ciudad {
 
   @OneToMany(()=>CiudadProfesor, domicilios => domicilios.ciudad) 
   public domicilios:CiudadProfesor[];
-
+  
+  
+  //Conectando la tabla ciudad_estudiante con ciudad y estudiante
+  @OneToMany(()=>CiudadEstudiante, ciudadEstudiante => ciudadEstudiante.ciudad)
+  ciudadEstudiante:CiudadEstudiante[]
 
   constructor(paramNombre: string) {
     this.nombre = paramNombre;

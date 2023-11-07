@@ -1,26 +1,46 @@
 import { Injectable } from '@nestjs/common';
-import { CreateEscuelaDto } from './dto/create-escuela.dto';
-import { UpdateEscuelaDto } from './dto/update-escuela.dto';
+import { EscuelaDto } from './dto/escuelaDto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Escuela } from './entities/escuela.entity';
+import { FindOneOptions, Repository } from 'typeorm';
 
 @Injectable()
 export class EscuelaService {
-  create(createEscuelaDto: CreateEscuelaDto) {
-    return 'This action adds a new escuela';
+
+  constructor(@InjectRepository(Escuela)
+              private readonly escuelaRepository:Repository <Escuela>){}
+
+
+  async create(createEscuelaDto: EscuelaDto):Promise <any> {
+    let escuelaNueva:Escuela =  new Escuela(createEscuelaDto.nombre,createEscuelaDto.domicilio);
+    return this.escuelaRepository.save(escuelaNueva)
+
   }
 
-  findAll() {
-    return `This action returns all escuela`;
+  async findAll() {
+    return await this.escuelaRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} escuela`;
+  async findOne(id: number):Promise <any> {
+    let criterio:FindOneOptions = { where : { id : id  } };
+    let escuelaEncontrada:Escuela = await this.escuelaRepository.findOne(criterio);
+    return escuelaEncontrada;
   }
 
-  update(id: number, updateEscuelaDto: UpdateEscuelaDto) {
-    return `This action updates a #${id} escuela`;
+  async update(id: number, updateEscuelaDto: EscuelaDto) {
+    let criterio:FindOneOptions = { where : { id : id  } };
+    let escuelaEncontrada:Escuela = await this.escuelaRepository.findOne(criterio);
+
+    escuelaEncontrada.setNombre(updateEscuelaDto.nombre);
+    escuelaEncontrada.setDomicilio(updateEscuelaDto.domicilio);
+
+    return await this.escuelaRepository.save(escuelaEncontrada)
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} escuela`;
+  async remove(id: number):Promise <any> {
+    let criterio:FindOneOptions = { where : { id : id  } };
+    let escuelaEncontrada:Escuela = await this.escuelaRepository.findOne(criterio);
+
+    return await this.escuelaRepository.remove(escuelaEncontrada)
   }
 }
